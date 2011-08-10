@@ -34,7 +34,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (delegate != nil && [delegate conformsToProtocol:@protocol(PostCardImageViewDelegate)])
+    if (delegate != nil && [delegate conformsToProtocol:@protocol(TouchImageViewDelegate)])
     {
         NSObject *obj = delegate;
         [obj performSelectorOnMainThread:@selector(didTouchImageView:) withObject:self waitUntilDone:NO];
