@@ -9,7 +9,8 @@ Create UIImageView with InterfaceBuilder and set Class to "TouchImageView"
 Set *delegate* from created image to you delegate object. Delegate object should implement protocol <TouchImageViewDelegate>
 
 Every time image is touched (clicked) this method is called on delegate object:
-- (void) didTouchImageView:(TouchImageView *) imageView;
+
+    - (void) didTouchImageView:(TouchImageView *) imageView;
 
 Credits
 -------
