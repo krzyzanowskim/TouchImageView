@@ -13,6 +13,7 @@
 - (void) didTouchImageView:(TouchImageView *) imageView;
 @end
 
+typedef enum { TouchImageDrawMode = 0, TouchImageEraseMode} TouchImageEditingMode;
 
 @interface TouchImageView : UIImageView {
     id <TouchImageViewDelegate> delegate;
@@ -25,6 +26,7 @@
 
 
 @property (nonatomic, assign) BOOL editMode;
+@property (nonatomic, assign) TouchImageEditingMode editingMode;
 @property (nonatomic, assign) IBOutlet id <TouchImageViewDelegate> delegate;
 
 @end

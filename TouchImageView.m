@@ -12,6 +12,7 @@
 
 @synthesize delegate;
 @synthesize editMode;
+@synthesize editingMode;
 
 - (id)init
 {
@@ -57,18 +58,34 @@
         UITouch *touch = [touches anyObject];	
         CGPoint currentPoint = [touch locationInView:self];
         
-        UIGraphicsBeginImageContext(self.frame.size);
-        [self.image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-        CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-        CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 8.0);
-        CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);
-        CGContextBeginPath(UIGraphicsGetCurrentContext());
-        CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-        CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), currentPoint.x, currentPoint.y);
-        CGContextStrokePath(UIGraphicsGetCurrentContext());
-        self.image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
+        if (self.editingMode == TouchImageDrawMode)
+        {
+            UIGraphicsBeginImageContext(self.frame.size);
+            [self.image drawAtPoint:CGPointZero];
+            CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
+            CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 8.0);
+            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);
+            CGContextBeginPath(UIGraphicsGetCurrentContext());
+            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
+            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), currentPoint.x, currentPoint.y);
+            CGContextStrokePath(UIGraphicsGetCurrentContext());
+            self.image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+        }
+        else if (self.editingMode == TouchImageEraseMode)
+        {                        
+            UIGraphicsBeginImageContext(self.frame.size);
+            CGMutablePathRef erasePath = CGPathCreateMutable();
+            CGPathAddEllipseInRect(erasePath, NULL, CGRectMake(currentPoint.x-20, currentPoint.y-20, 40, 40));
+            CGContextAddPath(UIGraphicsGetCurrentContext(),erasePath);
+            CGContextAddRect(UIGraphicsGetCurrentContext(),CGRectMake(0,0,self.image.size.width,self.image.size.height));
+            CGContextEOClip(UIGraphicsGetCurrentContext());
+            [self.image drawAtPoint:CGPointZero];
+            self.image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            CGPathRelease(erasePath);
+        }
         lastPoint = currentPoint;
         
         mouseMoved++;
@@ -79,24 +96,24 @@
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	if (editMode)
-    {
-        if(!mouseSwiped) {
-            UIGraphicsBeginImageContext(self.frame.size);
-            [self.image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-            CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-            CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 8.0);
-            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);
-            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-            CGContextStrokePath(UIGraphicsGetCurrentContext());
-            CGContextFlush(UIGraphicsGetCurrentContext());
-            self.image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-        }
-    }
-}
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+//	if (editMode)
+//    {
+//        if(!mouseSwiped) {
+//            UIGraphicsBeginImageContext(self.frame.size);
+//            [self.image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+//            CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
+//            CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 8.0);
+//            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);
+//            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
+//            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
+//            CGContextStrokePath(UIGraphicsGetCurrentContext());
+//            CGContextFlush(UIGraphicsGetCurrentContext());
+//            self.image = UIGraphicsGetImageFromCurrentImageContext();
+//            UIGraphicsEndImageContext();
+//        }
+//    }
+//}
 
 - (void)dealloc
 {
