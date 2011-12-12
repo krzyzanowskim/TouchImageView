@@ -96,24 +96,6 @@
     }
 }
 
-//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//	if (editMode)
-//    {
-//        if(!mouseSwiped) {
-//            UIGraphicsBeginImageContext(self.frame.size);
-//            [self.image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-//            CGContextSetLineCap(UIGraphicsGetCurrentContext(), kCGLineCapRound);
-//            CGContextSetLineWidth(UIGraphicsGetCurrentContext(), 8.0);
-//            CGContextSetRGBStrokeColor(UIGraphicsGetCurrentContext(), 0.0, 0.0, 0.0, 1.0);
-//            CGContextMoveToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-//            CGContextAddLineToPoint(UIGraphicsGetCurrentContext(), lastPoint.x, lastPoint.y);
-//            CGContextStrokePath(UIGraphicsGetCurrentContext());
-//            CGContextFlush(UIGraphicsGetCurrentContext());
-//            self.image = UIGraphicsGetImageFromCurrentImageContext();
-//            UIGraphicsEndImageContext();
-//        }
-//    }
-//}
 
 - (void)dealloc
 {

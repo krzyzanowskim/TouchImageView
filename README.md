@@ -12,6 +12,12 @@ Every time image is touched (clicked) this method is called on delegate object:
 
     - (void) didTouchImageView:(TouchImageView *) imageView;
 
+
+Bonus
+-----
+
+Switch property editMode to TouchImageDrawMode or TouchImageEraseMode and you can draw on image with you finger.
+
 Credits
 -------
 
